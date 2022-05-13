@@ -21,10 +21,6 @@ class Contact {
             .toList(),
       );
 
-  // static List<Contact> decode(String contacts) =>
-  //     (json.Decode(contacts) as List<Contact>)
-  //         .map<Music>((item) => Music.fromJson(item))
-  //         .toList();
   static List<Contact> decode(String contact) =>
       (jsonDecode(contact) as List<dynamic>)
           .map<Contact>((item) => Contact.fromJson(item))
