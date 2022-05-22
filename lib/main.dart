@@ -32,6 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final Future<SharedPreferences> prefs = SharedPreferences.getInstance();
   final textFieldNameController = TextEditingController();
   final textFieldPhoneNumberController = TextEditingController();
+  final textFieldSearchController = TextEditingController();
   // List<Contact> contact_lists = [];
 
   @override
@@ -59,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void dispose() {
     textFieldNameController.dispose();
     textFieldPhoneNumberController.dispose();
+    textFieldSearchController.dispose();
     super.dispose();
   }
 
@@ -78,6 +80,20 @@ class _MyHomePageState extends State<MyHomePage> {
                       Padding(
                         padding: const EdgeInsets.only(
                             left: 8.0, right: 8.0, bottom: 8.0, top: 50),
+                        child: TextFormField(
+                          onChanged: (searchValue) {
+                            value.filterList(searchValue);
+                          },
+                          controller: textFieldSearchController,
+                          decoration: const InputDecoration(
+                              suffixIcon: Icon(Icons.search),
+                              border: OutlineInputBorder(),
+                              hintText: 'Search'),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 8.0, right: 8.0, bottom: 8.0),
                         child: TextFormField(
                           controller: textFieldNameController,
                           decoration: const InputDecoration(
@@ -110,14 +126,19 @@ class _MyHomePageState extends State<MyHomePage> {
                       Flexible(
                         child: ListView.builder(
                             padding: const EdgeInsets.all(8),
-                            itemCount: value.list.length,
+                            itemCount: textFieldSearchController.text == ""
+                                ? value.list.length
+                                : value.temporaryLists.length,
                             itemBuilder: (BuildContext context, int index) {
                               return Container(
                                 key: UniqueKey(),
                                 height: 50,
                                 child: Center(
-                                    child: Text(
-                                        'Name: ${value.list[index].name} Phone Number ${value.list[index].phoneNumber}')),
+                                    child: Text(textFieldSearchController
+                                                .text ==
+                                            ""
+                                        ? 'Name: ${value.list[index].name} Phone Number ${value.list[index].phoneNumber}'
+                                        : 'Name: ${value.temporaryLists[index].name} Phone Number ${value.temporaryLists[index].phoneNumber}')),
                               );
                             }),
                       )

@@ -5,6 +5,7 @@ import 'Contact.dart';
 
 class ContactState with ChangeNotifier {
   List<Contact> _lists = [];
+  List<Contact> _temporaryLists = [];
   ContactState() {
     getContacts();
   }
@@ -26,4 +27,22 @@ class ContactState with ChangeNotifier {
   }
 
   List<Contact> get list => _lists;
+  List<Contact> get temporaryLists => _temporaryLists;
+
+  void filterList(String search) {
+    final searchValue = search;
+    if (double.tryParse(searchValue) == null) {
+      _temporaryLists = list
+          .where((value) =>
+              value.name.toLowerCase().contains(search.toLowerCase()))
+          .toList();
+    } else {
+      _temporaryLists = list
+          .where((value) =>
+              value.phoneNumber.toLowerCase().contains(search.toLowerCase()))
+          .toList();
+    }
+
+    notifyListeners();
+  }
 }
