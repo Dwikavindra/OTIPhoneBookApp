@@ -15,6 +15,8 @@ class Contact {
         'phoneNumber': contact.phoneNumber,
       };
 
+      //Can be for post method later on
+
   static String encode(List<Contact> contacts) => json.encode(
         contacts
             .map<Map<String, dynamic>>((contacts) => Contact.toJson(contacts))

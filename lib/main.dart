@@ -32,37 +32,28 @@ class _MyHomePageState extends State<MyHomePage> {
   final Future<SharedPreferences> prefs = SharedPreferences.getInstance();
   final textFieldNameController = TextEditingController();
   final textFieldPhoneNumberController = TextEditingController();
-  List<Contact> contact_lists = [];
+  // List<Contact> contact_lists = [];
 
   @override
   void initState() {
-    // TODO: implement initState
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   getContacts();
     // });
-    // setState(() async {
-    //   final SharedPreferences preferences = await prefs;
-    //   final String? contactsString = await preferences.getString('contact');
-    //   contact_lists = jsonDecode(contactsString!) as List<Contact>;
-    // });
-    getContacts();
+    // getContacts();
     super.initState();
   }
 
-  getContacts() async {
-    final SharedPreferences preferences = await prefs;
-    final String? contactsString = await preferences.getString('contact');
-    print(contactsString);
+  // getContacts() async {
+  //   final SharedPreferences preferences = await prefs;
+  //   final String? contactsString = await preferences.getString('contact');
+  //   print(contactsString);
 
-    if (contactsString != null) {
-      setState(() {
-        contact_lists = Contact.decode(contactsString);
-      });
-    } else {
-      contact_lists = [];
-    }
-  }
+  //   if (contactsString != null) {
+  //     setState(() {
+  //       contact_lists = Contact.decode(contactsString);
+  //     });
+  //   } else {
+  //     contact_lists = [];
+  //   }
+  // }
 
   @override
   void dispose() {
@@ -85,22 +76,22 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Column(
                     children: <Widget>[
                       Padding(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                             left: 8.0, right: 8.0, bottom: 8.0, top: 50),
                         child: TextFormField(
                           controller: textFieldNameController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                               suffixIcon: Icon(Icons.person),
                               border: OutlineInputBorder(),
                               hintText: 'Enter name'),
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                             left: 8.0, right: 8.0, bottom: 8.0, top: 8.0),
                         child: TextFormField(
                           controller: textFieldPhoneNumberController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                               suffixIcon: Icon(Icons.phone),
                               border: OutlineInputBorder(),
                               hintText: 'Enter phone number'),
@@ -113,31 +104,20 @@ class _MyHomePageState extends State<MyHomePage> {
                                 textFieldPhoneNumberController.text;
                             Contact newContact =
                                 Contact(name: name, phoneNumber: phoneNumber);
-                            setState(() {
-                              contact_lists.add(newContact);
-                              print(contact_lists);
-                            });
-
-                            final String encodedData =
-                                Contact.encode(contact_lists);
-                            final SharedPreferences sharedpreferences =
-                                await prefs;
-                            await sharedpreferences.setString(
-                                'contact', encodedData);
+                            value.addLists(newContact);
                           }),
                           child: const Text("Add")),
-                      SizedBox(
-                        height: 500,
+                      Flexible(
                         child: ListView.builder(
                             padding: const EdgeInsets.all(8),
-                            itemCount: contact_lists.length,
+                            itemCount: value.list.length,
                             itemBuilder: (BuildContext context, int index) {
                               return Container(
                                 key: UniqueKey(),
                                 height: 50,
                                 child: Center(
                                     child: Text(
-                                        'Name: ${contact_lists[index].name} Phone Number ${contact_lists[index].phoneNumber}')),
+                                        'Name: ${value.list[index].name} Phone Number ${value.list[index].phoneNumber}')),
                               );
                             }),
                       )
